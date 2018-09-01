@@ -1,0 +1,7 @@
+PROJNAME=cambooth
+
+DB_NAME=cam_db
+DB_USER=camuser
+DB_PASS=resumac
+DB_HOST=db
+DB_PORT=5432

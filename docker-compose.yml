@@ -1,0 +1,52 @@
+version: '3'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: db_postgres
+    env_file:
+      - filenv
+    volumes:
+      - ./config/postgres/initdb:/docker-entrypoint-initdb.d
+      - ./data/db:/var/lib/postgresql/data
+    networks:
+      - db_network
+  web:
+    build: .
+    image: cambooth
+    container_name: web_django
+    env_file:
+      - filenv
+    volumes:
+      - ./code:/workspace/code
+      - static:/workspace/static
+      - media:/workspace/media
+    networks:
+      - nginx_network
+      - db_network
+    depends_on:
+      - db
+  nginx:
+    image: nginx:latest
+    container_name: proxy_nginx
+    volumes:
+      - ./config/nginx:/etc/nginx/conf.d
+      - ./code:/workspace/code
+      - static:/workspace/static
+      - media:/workspace/media
+    networks:
+      - nginx_network
+    ports:
+      - "8102:8102"
+    depends_on:
+      - web
+
+networks:
+  nginx_network:
+    driver: bridge
+  db_network:
+    driver: bridge
+
+volumes:
+  static:
+  media:
