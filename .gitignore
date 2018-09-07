@@ -12,3 +12,4 @@ output/*
 *.aux
 *.synctex.gz
 *.bak
+rsync-proj.sh
